@@ -19,7 +19,7 @@
                     <x-nav-link href="" :active="request()->routeIs('posts.*')">
                         {{ __('Posts') }}
                     </x-nav-link>
-                    <x-nav-link href="" :active="request()->routeIs('catgeories.*')">
+                    <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('catgeories.*')">
                         {{ __('Categories') }}
                     </x-nav-link>
                 </div>

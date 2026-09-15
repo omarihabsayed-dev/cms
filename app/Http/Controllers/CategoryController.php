@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Category;
 use Illuminate\Http\Request;
+use App\Http\Requests\Categories\CreateCategoryRequest;
+use App\Http\Requests\Categories\UpdateCategoryRequest;
+
 
 class CategoryController extends Controller
 {
@@ -12,7 +15,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        //
+        return view('categories.index', ['categories' => Category::all()]);
     }
 
     /**
@@ -20,15 +23,17 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        //
+        return view('categories.form');
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(CreateCategoryRequest $request)
     {
-        //
+        $validated = $request->validated();
+        Category::create($validated);
+        return redirect()->route('categories.index')->with('success', 'Category added successfully');
     }
 
     /**
@@ -36,7 +41,7 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        return view('categories.show', ['category' => $category]);
     }
 
     /**
@@ -44,15 +49,16 @@ class CategoryController extends Controller
      */
     public function edit(Category $category)
     {
-        //
+        return view('categories.form', ['category' => $category]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Category $category)
+    public function update(UpdateCategoryRequest $request, Category $category)
     {
-        //
+        $category->update($request->validated());
+        return redirect()->route('categories.index')->with('success', 'Category updated successfully');
     }
 
     /**
