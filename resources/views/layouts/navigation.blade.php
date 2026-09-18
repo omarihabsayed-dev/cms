@@ -16,11 +16,14 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('posts.index') }}" :active="request()->routeIs('posts.*')">
+                    <x-nav-link href="{{ route('posts.index') }}" :active="request()->routeIs('posts.index')">
                         {{ __('Posts') }}
                     </x-nav-link>
-                    <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('catgeories.*')">
+                    <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.*')">
                         {{ __('Categories') }}
+                    </x-nav-link>
+                    <x-nav-link href="{{ route('posts.trash') }}" :active="request()->routeIs('posts.trash')">
+                        {{ __('Trash') }}
                     </x-nav-link>
                 </div>
             </div>
@@ -51,7 +54,7 @@
 
                             <x-dropdown-link :href="route('logout')"
                                     onclick="event.preventDefault();
-                                                this.closest('form').submit();">
+                                    this.closest('form').submit();">
                                 {{ __('Log Out') }}
                             </x-dropdown-link>
                         </form>
@@ -97,7 +100,7 @@
 
                     <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
-                                        this.closest('form').submit();">
+                            this.closest('form').submit();">
                         {{ __('Log Out') }}
                     </x-responsive-nav-link>
                 </form>

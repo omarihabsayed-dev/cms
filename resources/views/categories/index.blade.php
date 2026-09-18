@@ -26,6 +26,7 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3 w-20">ID</th>
                                 <th scope="col" class="px-6 py-3">Name</th>
+                                <th scope="col" class="px-6 py-3">Number of Posts</th>
                                 <th scope="col" class="px-6 py-3 w-48 text-right">Actions</th>
                             </tr>
                         </thead>
@@ -38,6 +39,9 @@
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
                                         {{ $category->name }}
+                                    </td>
+                                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
+                                        {{ $category->posts->count() }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex justify-end items-center gap-2 whitespace-nowrap">

@@ -26,8 +26,9 @@ class CreatePostRequest extends FormRequest
             'title' => ['required', 'string', 'max:255'],
             'description' => ['required', 'string', 'max:1000'],
             'content' => ['required', 'string'],
-            'image' => ['nullable', 'image', 'mimes:jpg,jpeg,png', 'max:20248'],
+            'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'published_at' => ['required', 'date'],
+            'category_id' => ['required', 'integer', 'exists:categories,id'],
         ];
     }
 }

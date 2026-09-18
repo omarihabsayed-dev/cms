@@ -41,7 +41,8 @@ class CategoryController extends Controller
      */
     public function show(Category $category)
     {
-        //
+        $posts = $category->posts()->latest()->paginate(10);
+        return view('posts.index', ['posts' => $posts, 'category' => $category, 'isTrash' => false]);
     }
 
     /**

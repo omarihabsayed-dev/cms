@@ -28,7 +28,7 @@
                         <input type="text"
                                name="title"
                                id="title"
-                               value="{{ isset($post) ? $post->title : '' }}"
+                               value="{{ old('title', $post->title ?? '') }}"
                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
                                placeholder="Enter post title">
                         @error('title')
@@ -44,25 +44,48 @@
                                   id="description" 
                                   rows="3"
                                   class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                                  placeholder="Short description...">{{ isset($post) ? $post->description : '' }}</textarea>
+                                  placeholder="Short description...">{{ old('description', $post->description ?? '') }}</textarea>
                         @error('description')
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
 
                     <div>
-                        <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
-                            Content
+                        <label for="category_id" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Category
                         </label>
-                        <textarea name="content" 
-                                  id="content" 
-                                  rows="8"
-                                  class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm"
-                                  placeholder="Write your full content here...">{{ isset($post) ? $post->content : '' }}</textarea>
-                        @error('content')
+                        <select name="category_id" 
+                                id="category_id"
+                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
+                            <option value="">Select a category</option>
+                            @foreach($categories as $category)
+                                <option value="{{ $category->id }}" 
+                                    {{ old('category_id', $post->category_id ?? '') == $category->id ? 'selected' : '' }}>
+                                    {{ $category->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                        @error('category_id')
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
+
+                <div>
+                    <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Content
+                    </label>
+                    <input id="content" type="hidden" name="content" value="{!! old('content', $post->content ?? '') !!}">
+                    
+                    <div class="rounded-md border border-gray-300 dark:border-gray-700 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 overflow-hidden bg-white dark:bg-gray-900">
+                        <trix-editor input="content" placeholder="Write your full content here..." 
+                            class="block w-full min-h-[200px] text-sm trix-content border-none outline-none dark:text-gray-300">
+                        </trix-editor>
+                    </div>
+
+                    @error('content')
+                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                    @enderror
+                </div>
 
                     <div>
                         <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
@@ -95,7 +118,7 @@
                         <input type="datetime-local" 
                                name="published_at" 
                                id="published_at"
-                               value="{{ (isset($post) && $post->published_at) ? $post->published_at->format('Y-m-d\TH:i') : '' }}"
+                               value="{{ old('published_at', isset($post) && $post->published_at ? $post->published_at->format('Y-m-d\TH:i') : '') }}"
                                class="mt-1 block w-full rounded-md border-gray-300 dark:border-gray-700 dark:bg-gray-900 dark:text-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 text-sm">
                         @error('published_at')
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>

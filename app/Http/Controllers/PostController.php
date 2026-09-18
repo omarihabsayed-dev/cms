@@ -6,6 +6,8 @@ use App\Models\Post;
 use Illuminate\Http\Request;
 use App\Http\Requests\Posts\CreatePostRequest;
 use App\Http\Requests\Posts\UpdatePostRequest;
+use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -14,7 +16,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        return view('posts.index', ['posts' => Post::all()]);
+        return view('posts.index', ['posts' => Post::latest()->paginate(10), 'isTrash' => false]);
     }
 
     /**
@@ -22,7 +24,8 @@ class PostController extends Controller
      */
     public function create()
     {
-        return view('posts.form');
+        $categories = Category::all();
+        return view('posts.form', ['categories' => $categories]);
     }
 
     /**
@@ -51,7 +54,8 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        return view('posts.form', ['post' => $post]);
+        $categories = Category::all();
+        return view('posts.form', ['post' => $post, 'categories' => $categories]);
     }
 
     /**
@@ -60,6 +64,12 @@ class PostController extends Controller
     public function update(UpdatePostRequest $request, Post $post)
     {
         $validated = $request->validated();
+        if($request->hasFile('image')) {
+            $validated['image'] = $request->file('image')->store('posts', 'public');
+            if($post->image) {
+                Storage::disk('public')->delete($post->image);
+            }
+        }
         $post->update($validated);
         return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }
@@ -70,6 +80,24 @@ class PostController extends Controller
     public function destroy(Post $post)
     {
         $post->delete();
+        return redirect()->route('posts.index')->with('success', 'Post trashed successfully');
+    }
+
+    public function trash() {
+        $posts = Post::onlyTrashed()->latest()->paginate(10);
+        return view('posts.index', ['posts' => $posts, 'isTrash' => true]);
+    }
+
+    public function restore(Post $post) {
+        $post->restore();
+        return redirect()->back()->with('success', 'Post restored successfully');
+    }
+
+    public function forceDelete(Post $post) {
+        if($post->image) {
+            Storage::disk('public')->delete($post->image);
+        }
+        $post->forceDelete();
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
     }
 }

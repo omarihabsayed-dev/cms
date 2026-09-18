@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('title');
             $table->text('description');
             $table->text('content');
+            $table->integer('category_id');
             $table->string('image');
             $table->timestamp('published_at')->nullable();
             $table->timestamps();
