@@ -7,9 +7,11 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Posts\CreatePostRequest;
 use App\Http\Requests\Posts\UpdatePostRequest;
 use App\Models\Category;
+use Illuminate\Routing\Controllers\Middleware;
+use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Storage;
 
-class PostController extends Controller
+class PostController extends Controller implements HasMiddleware
 {
     /**
      * Display a listing of the resource.
@@ -99,5 +101,11 @@ class PostController extends Controller
         }
         $post->forceDelete();
         return redirect()->route('posts.index')->with('success', 'Post deleted successfully');
+    }
+
+    public static function middleware(): array {
+        return [
+            new Middleware('has.categories', only: ['create', 'store'])
+        ];
     }
 }

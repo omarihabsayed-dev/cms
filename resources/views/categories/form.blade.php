@@ -13,6 +13,11 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg p-6">
+                @if(session('error'))
+                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-800 dark:bg-red-900/40 dark:border-red-600 dark:text-red-200 rounded-md text-sm">
+                    {{ session('error') }}
+                </div>
+                @endif
 
                 <form action="{{ isset($category) ? route('categories.update', $category) : route('categories.store') }}"
                       method="POST" class="space-y-6">
@@ -35,7 +40,6 @@
                         @error('name')
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
-                    </div>
 
                     <div class="flex justify-end">
                         <button type="submit" class="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition">
