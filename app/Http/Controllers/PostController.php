@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Http\Requests\Posts\CreatePostRequest;
 use App\Http\Requests\Posts\UpdatePostRequest;
 use App\Models\Category;
+use App\Models\Tag;
 use Illuminate\Routing\Controllers\Middleware;
 use Illuminate\Routing\Controllers\HasMiddleware;
 use Illuminate\Support\Facades\Storage;
@@ -27,7 +28,8 @@ class PostController extends Controller implements HasMiddleware
     public function create()
     {
         $categories = Category::all();
-        return view('posts.form', ['categories' => $categories]);
+        $tags = Tag::all();
+        return view('posts.form', ['categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -39,7 +41,8 @@ class PostController extends Controller implements HasMiddleware
         if($request->hasFile('image')) {
             $validated['image'] = $request->file('image')->store('posts', 'public');
         }
-        Post::create($validated);
+        $post = Post::create($validated);
+        $post->tags()->sync($validated['tags']); 
         return redirect()->route('posts.index')->with('success', 'Post created successfully');
     }
 
@@ -57,7 +60,9 @@ class PostController extends Controller implements HasMiddleware
     public function edit(Post $post)
     {
         $categories = Category::all();
-        return view('posts.form', ['post' => $post, 'categories' => $categories]);
+        $post->load('tags');
+        $tags = Tag::all();
+        return view('posts.form', ['post' => $post, 'categories' => $categories, 'tags' => $tags]);
     }
 
     /**
@@ -73,6 +78,7 @@ class PostController extends Controller implements HasMiddleware
             }
         }
         $post->update($validated);
+        $post->tags()->sync($validated['tags']);
         return redirect()->route('posts.index')->with('success', 'Post updated successfully');
     }
 

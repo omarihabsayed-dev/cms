@@ -4,6 +4,7 @@ namespace App\Http\Requests\Posts;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Override;
 
 class CreatePostRequest extends FormRequest
 {
@@ -29,6 +30,15 @@ class CreatePostRequest extends FormRequest
             'image' => ['required', 'image', 'mimes:jpg,jpeg,png', 'max:2048'],
             'published_at' => ['required', 'date'],
             'category_id' => ['required', 'integer', 'exists:categories,id'],
+            'tags' => 'required|array|min:1',
+            'tags.*' => 'exists:tags,id',
+        ];
+    }
+
+    public function attributes()
+    {
+        return [
+            'category_id' => 'category',
         ];
     }
 }

@@ -69,23 +69,54 @@
                             <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                     </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                            Tag
+                        </label>
 
-                <div>
-                    <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                        Content
-                    </label>
-                    <input id="content" type="hidden" name="content" value="{!! old('content', $post->content ?? '') !!}">
-                    
-                    <div class="rounded-md border border-gray-300 dark:border-gray-700 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 overflow-hidden bg-white dark:bg-gray-900">
-                        <trix-editor input="content" placeholder="Write your full content here..." 
-                            class="block w-full min-h-[200px] text-sm trix-content border-none outline-none dark:text-gray-300">
-                        </trix-editor>
+                        <div class="mt-2 space-y-2">
+                            @foreach($tags as $tag)
+                                <label for="tag_{{ $tag->id }}"
+                                    class="flex items-center gap-2 cursor-pointer text-sm text-gray-700 dark:text-gray-300">
+                                    <input type="checkbox"
+                                        name="tags[]"
+                                        id="tag_{{ $tag->id }}"
+                                        value="{{ $tag->id }}"
+                                        {{ 
+                                            (is_array(old('tags')) && in_array($tag->id, old('tags'))) || 
+                                            (!session()->has('errors') && isset($post) && $post->tags->pluck('id')->contains($tag->id)) 
+                                            ? 'checked' : '' 
+                                        }}
+                                        class="rounded border-gray-300 text-indigo-600 shadow-sm focus:ring-indigo-500 dark:border-gray-700 dark:bg-gray-900">
+                                    <span>{{ $tag->name }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+
+                        @error('tags')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                        @error('tags.*')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
                     </div>
+                
+                    <div>
+                        <label for="content" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Content
+                        </label>
+                        <input id="content" type="hidden" name="content" value="{!! old('content', $post->content ?? '') !!}">
+                        
+                        <div class="rounded-md border border-gray-300 dark:border-gray-700 shadow-sm focus-within:border-indigo-500 focus-within:ring-1 focus-within:ring-indigo-500 overflow-hidden bg-white dark:bg-gray-900">
+                            <trix-editor input="content" placeholder="Write your full content here..." 
+                                class="block w-full min-h-[200px] text-sm trix-content border-none outline-none dark:text-gray-300">
+                            </trix-editor>
+                        </div>
 
-                    @error('content')
-                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                    @enderror
-                </div>
+                        @error('content')
+                            <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                    </div>
 
                     <div>
                         <label for="image" class="block text-sm font-medium text-gray-700 dark:text-gray-300">

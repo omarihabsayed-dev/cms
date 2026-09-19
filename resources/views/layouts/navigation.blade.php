@@ -22,6 +22,9 @@
                     <x-nav-link href="{{ route('categories.index') }}" :active="request()->routeIs('categories.*')">
                         {{ __('Categories') }}
                     </x-nav-link>
+                    <x-nav-link href="{{ route('tags.index') }}" :active="request()->routeIs('tags.*')">
+                        {{ __('Tags') }}
+                    </x-nav-link>
                     <x-nav-link href="{{ route('posts.trash') }}" :active="request()->routeIs('posts.trash')">
                         {{ __('Trash') }}
                     </x-nav-link>
