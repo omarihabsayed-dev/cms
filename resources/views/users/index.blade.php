@@ -2,11 +2,8 @@
     <x-slot name="header">
         <div class="flex justify-between items-center">
             <h2 class="font-semibold text-xl text-gray-800 dark:text-gray-200 leading-tight">
-                Tags
+                Users
             </h2>
-            <a href="{{ route('tags.create') }}" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition">
-                + Add Tag
-            </a>
         </div>
     </x-slot>
 
@@ -32,38 +29,34 @@
                             <tr>
                                 <th scope="col" class="px-6 py-3 w-20">ID</th>
                                 <th scope="col" class="px-6 py-3">Name</th>
-                                <th scope="col" class="px-6 py-3">Number of Posts</th>
+                                <th scope="col" class="px-6 py-3">Email</th>
                                 <th scope="col" class="px-6 py-3 w-48 text-right">Actions</th>
                             </tr>
                         </thead>
                         <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
 
-                            @forelse($tags as $tag)
+                            @forelse($users as $user)
                                 <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $tag->id }}
+                                        {{ $user->id }}
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $tag->name }}
+                                        {{ $user->name }}
                                     </td>
                                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-gray-200">
-                                        {{ $tag->posts->count() }}
+                                        {{ $user->email }}
                                     </td>
                                     <td class="px-6 py-4">
                                         <div class="flex justify-end items-center gap-2 whitespace-nowrap">
-                                            <a href="{{ route('tags.edit', $tag) }}"
-                                               class="px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-200 text-indigo-600 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-600 dark:hover:text-white transition">
-                                                Edit
-                                            </a>
-
-                                            <form action="{{ route('tags.destroy', $tag) }}" method="POST"
-                                                  onsubmit="return confirm('Are you sure you want to delete this tag?');">
+                                            <form action="{{ route('users.make-admin', $user) }}" method="POST"
+                                                  onsubmit="return confirm('Are you sure you want to delete this category?');">
                                                 @csrf
-                                                @method('DELETE')
+                                                @if(!$user->isAdmin())
                                                 <button type="submit"
-                                                        class="px-3 py-1.5 text-xs font-medium rounded-md border border-red-200 text-red-600 hover:bg-red-600 hover:border-red-600 hover:text-white dark:border-red-800 dark:text-red-400 dark:hover:bg-red-600 dark:hover:text-white transition">
-                                                    Delete
+                                                        class="px-3 py-1.5 text-xs font-medium rounded-md border border-indigo-200 text-indigo-600 hover:bg-indigo-600 hover:border-indigo-600 hover:text-white dark:border-indigo-800 dark:text-indigo-400 dark:hover:bg-indigo-600 dark:hover:text-white transition">
+                                                    Make Admin
                                                 </button>
+                                                @endif
                                             </form>
                                         </div>
                                     </td>
@@ -71,7 +64,7 @@
                             @empty
                                 <tr>
                                     <td colspan="3" class="px-6 py-4 text-center text-gray-500 dark:text-gray-400">
-                                        No tags found. Click "+ Add Tag" to create one.
+                                        No users found.
                                     </td>
                                 </tr>
                             @endforelse

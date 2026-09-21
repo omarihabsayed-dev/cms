@@ -4,6 +4,8 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\TagController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\UsersController;
+use App\Models\User;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -29,5 +31,8 @@ Route::middleware('auth')->group(function () {
 
      Route::resource('tags', TagController::class);
 });
-
+Route::middleware(['auth', 'admin'])->group(function () {
+    Route::get('users', [UsersController::class, 'index'])->name('users.index');
+    Route::post('users/{user}/make-admin', [UsersController::class, 'makeAdmin'])->name('users.make-admin');
+});
 require __DIR__.'/auth.php';

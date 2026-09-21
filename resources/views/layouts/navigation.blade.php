@@ -28,6 +28,11 @@
                     <x-nav-link href="{{ route('posts.trash') }}" :active="request()->routeIs('posts.trash')">
                         {{ __('Trash') }}
                     </x-nav-link>
+                    @if(auth()->check() && auth()->user()->isAdmin())
+                    <x-nav-link href="{{ route('users.index') }}" :active="request()->routeIs('users.*')">
+                        {{ __('Users') }}
+                    </x-nav-link>
+                    @endif
                 </div>
             </div>
 

@@ -68,6 +68,9 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        if($category->posts->count() > 0) {
+            return redirect()->back()->with('error', 'Category can not be deleted because it is linked to a post.');
+        }
         $category->delete();
         return redirect()->route('categories.index')->with('success', 'Category deleted successfully');
     }
