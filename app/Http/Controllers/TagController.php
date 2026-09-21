@@ -40,8 +40,8 @@ class TagController extends Controller
      */
     public function show(Tag $tag)
     {
-        $tags = $tag->tags()->latest()->paginate(10);
-        return view('tags.index', ['tags' => $tags, 'tag' => $tag, 'isTrash' => false]);
+        $posts = $tag->posts()->searched()->latest()->paginate(10)->withQueryString();
+        return view('posts.index', ['posts' => $posts, 'tag' => $tag, 'isTrash' => false]);
     }
 
     /**

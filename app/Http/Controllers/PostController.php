@@ -17,9 +17,12 @@ class PostController extends Controller implements HasMiddleware
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return view('posts.index', ['posts' => Post::latest()->paginate(10), 'isTrash' => false]);
+        return view('posts.index', [
+            'posts' => Post::searched()->paginate(3)->withQueryString(),
+            'isTrash' => false,
+        ]);
     }
 
     /**
@@ -51,7 +54,7 @@ class PostController extends Controller implements HasMiddleware
      */
     public function show(Post $post)
     {
-        //
+        return view('posts.show', ['post' => $post]);
     }
 
     /**

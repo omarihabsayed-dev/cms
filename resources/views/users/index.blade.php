@@ -17,12 +17,6 @@
                 </div>
                 @endif
 
-                @if(session('error'))
-                <div class="mb-4 p-4 bg-red-100 border border-red-400 text-red-800 dark:bg-red-900/40 dark:border-red-600 dark:text-red-200 rounded-md text-sm">
-                    {{ session('error') }}
-                </div>
-                @endif
-
                 <div class="overflow-x-auto">
                     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                         <thead class="text-xs uppercase bg-gray-50 dark:bg-gray-700 text-gray-700 dark:text-gray-300">

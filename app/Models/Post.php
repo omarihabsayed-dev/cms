@@ -32,4 +32,12 @@ class Post extends Model
     public function tags() {
         return $this->belongsToMany(Tag::class, 'post_tag');
     }
+
+    public function scopeSearched($query) {
+        $search = request()->query('search');
+        if(!$search) {
+            return $query;
+        }
+        return $query->where('title', 'ILIKE', "%{$search}%");
+    }
 }

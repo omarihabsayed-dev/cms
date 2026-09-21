@@ -14,6 +14,34 @@
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mb-6">
+                <form action="{{ request()->url() }}" method="GET" class="flex gap-2">
+                    <div class="relative flex-1">
+                        <input 
+                            type="text" 
+                            name="search" 
+                            value="{{ request('search') }}" 
+                            placeholder="Search posts..." 
+                            class="w-full px-4 py-2 pl-10 border border-gray-300 dark:border-gray-700 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm"
+                        >
+                        <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <svg class="h-4 w-4 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                            </svg>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white text-sm font-medium rounded-md shadow-sm transition">
+                        Search
+                    </button>
+
+                    @if(request('search'))
+                        <a href="{{ request()->url() }}" class="px-4 py-2 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 text-sm font-medium rounded-md transition flex items-center">
+                            Clear
+                        </a>
+                    @endif
+                </form>
+            </div>
             
             @if(session('success'))
             <div class="mb-6 p-4 bg-green-100 border border-green-400 text-green-800 dark:bg-green-900/40 dark:border-green-600 dark:text-green-200 rounded-md text-sm">
@@ -27,7 +55,9 @@
                     <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-sm sm:rounded-lg flex flex-col">
                         
                         <div class="h-48 w-full overflow-hidden bg-gray-200 dark:bg-gray-700">
-                            <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                            <a href="{{ route('posts.show', $post) }}">
+                                <img src="{{ asset('storage/' . $post->image) }}" alt="{{ $post->title }}" class="w-full h-full object-cover hover:scale-105 transition-transform duration-300">
+                            </a>
                         </div>
 
 
@@ -108,7 +138,9 @@
                         </p>
                     </div>
                 @endforelse
-
+            </div>
+            <div class="mt-6">
+                {{ $posts->withQueryString()->links() }}
             </div>
         </div>
     </div>
